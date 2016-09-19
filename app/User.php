@@ -2,13 +2,10 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use \Cartalyst\Sentinel\Users\EloquentUser;
 
-class User extends Authenticatable
+class User extends EloquentUser
 {
-    use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -19,11 +16,43 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function theroles()
+    {
+        return $this->belongsToMany('App\Role', 'role_users', 'user_id', 'role_id');
+    }
+
+    public function setTherolesAttribute($roles)
+    {
+        $this->theroles()->detach();
+        if (!$roles) return;
+        if (!$this->exists) $this->save();
+        $this->theroles()->attach($roles);
+    }
+
+    public function getTherolesAttribute($roles)
+    {
+        return array_pluck($this->theroles()->get(['id'])->toArray(), 'id');
+    }
+
+    /**
+     * Hash the password given
+     *
+     * @param string $password
+     */
+    public function setPasswordAttribute($password)
+    {
+        if ($password) {
+            $this->attributes['password'] = bcrypt($password);
+//        $this->attributes['password'] = Hash::make($value);
+        }
+    }
+
 }

@@ -4,9 +4,20 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "url": "https://github.com/lor08/admin.git",
+            "type": "git"
+        }
+    ],
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.3.*"
+        "laravel/framework": "5.3.*",
+        "sleeping-owl/admin": "dev-fixSentinelfix52",
+        "cartalyst/sentinel": "2.0.*",
+        "laravelcollective/html": "5.3.*",
+        "kalnoy/nestedset": "^4.1",
+        "angrydeer/attachfiles": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
